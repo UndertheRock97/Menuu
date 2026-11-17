@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under The Rock | Wok Meals</title>
+    <style>
+        :root {
+            --bg-deep: #0a0f0d;
+            --bg-card: #121a15;
+            --accent: #10b981;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --border: #1f2923;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-deep); color: var(--text-main); padding: 16px; padding-bottom: 100px; max-width: 600px; margin: 0 auto; }
+        header { text-align: center; padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        header h1 { color: var(--accent); font-size: 1.5rem; letter-spacing: 1px; }
+        header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+        .section-title { font-size: 1.1rem; color: var(--accent); margin: 20px 0 10px; font-weight: bold; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .card-info h3 { font-size: 1rem; margin-bottom: 4px; }
+        .card-info p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+        .price { font-weight: bold; color: var(--accent); }
+        .options { display: flex; gap: 8px; margin-top: 8px; }
+        .opt-btn { background: #1a2620; border: 1px solid var(--border); color: var(--text-muted); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .opt-btn.active { background: var(--accent); color: #000; font-weight: bold; border-color: var(--accent); }
+        .add-btn { background: var(--accent); color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card); border-top: 1px solid var(--border); padding: 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; max-width: 600px; margin: 0 auto; }
+        .checkout-btn { background: #25D366; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>UNDER THE ROCK</h1>
+        <p>Dagoretti • Wanyee Rd | Open Daily 8:00 AM – 9:30 PM</p>
+    </header>
+
+    <div class="section-title">01 • Select Wok Whole Meal</div>
+    
+    <div class="card">
+        <div class="card-info">
+            <h3>Wok Whole Meal</h3>
+            <p>150–180g Protein, Veggies, Basmati Rice & Chutney</p>
+            <div class="options" id="flavor-options">
+                <button class="opt-btn active" data-flavor="Plain">Plain</button>
+                <button class="opt-btn" data-flavor="Chilli">Chilli</button>
+            </div>
+        </div>
+        <div>
+            <div class="price" style="margin-bottom:8px; text-align:right;">KSh 450</div>
+            <button class="add-btn" id="add-meal-btn">Add</button>
+        </div>
+    </div>
+
+    <div class="cart-bar">
+        <div>
+            <div id="cart-count" style="font-size:0.85rem; color:var(--text-muted);">0 items selected</div>
+            <div id="cart-total" style="font-size:1.1rem; font-weight:bold;">KSh 0</div>
+        </div>
+        <button class="checkout-btn" id="checkout-btn">Order on WhatsApp</button>
+    </div>
+
+    <script>
+        let selectedFlavor = 'Plain';
+        let mealAdded = false;
+        const mealPrice = 450;
+
+        const flavorButtons = document.querySelectorAll('.opt-btn');
+        flavorButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                flavorButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedFlavor = this.getAttribute('data-flavor');
+            });
+        });
+
+        document.getElementById('add-meal-btn').addEventListener('click', function() {
+            mealAdded = true;
+            updateUI();
+        });
+
+        function updateUI() {
+            const countText = document.getElementById('cart-count');
+            const totalText = document.getElementById('cart-total');
+            
+            if (mealAdded) {
+                countText.innerText = "1 item selected (Wok Whole Meal - " + selectedFlavor + ")";
+                totalText.innerText = "KSh " + mealPrice;
+            } else {
+                countText.innerText = "0 items selected";
+                totalText.innerText = "KSh 0";
+            }
+        }
+
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            if (!mealAdded) {
+                alert("Please add your meal first.");
+                return;
+            }
+            let text = "New Order - Under The Rock:\n- Wok Whole Meal (" + selectedFlavor + ") - KSh " + mealPrice + "\n\nTotal: KSh " + mealPrice + "\nPickup: Wanyee Rd, Dagoretti";
+            window.location.href = `https://wa.me/254745552333?text=` + encodeURIComponent(text);
+        });
+    </script>
+</body>
+</html>
